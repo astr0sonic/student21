@@ -1,5 +1,5 @@
 #include "max_value.h"
-
+#include <algorithm>
 double calculateMaxValue(double* nums, int n) {
     double minV = nums[0];
     double maxV = nums[0];
