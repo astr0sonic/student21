@@ -19,4 +19,3 @@ std::vector<int> sieve(int n) {
 
         return primes;
     }
-}
