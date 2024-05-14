@@ -1,5 +1,6 @@
 #include "bracket.h"
 #include <stack>
+
 bool checkBrackets(const std::string& s) {
     std::stack<char> st;
 
@@ -18,4 +19,11 @@ bool checkBrackets(const std::string& s) {
     }
 
     return st.empty();
+}
+
+bool isCorrectBracket(char left, char right) {
+    return (left == '(' && right == ')') ||
+        (left == '[' && right == ']') ||
+        (left == '{' && right == '}') ||
+        (left == '<' && right == '>');
 }
