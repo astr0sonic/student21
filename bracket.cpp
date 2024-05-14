@@ -9,7 +9,12 @@ bool checkBrackets(const std::string& s) {
             st.push(c);
         }
         else if (c == ')' || c == ']' || c == '}' || c == '>') {
-            if (!st.empty() && isCorrectBracket(st.top(), c)) {
+            if (!st.empty() && (
+                (st.top() == '(' && c == ')') ||
+                (st.top() == '[' && c == ']') ||
+                (st.top() == '{' && c == '}') ||
+                (st.top() == '<' && c == '>')
+                )) {
                 st.pop();
             }
             else {
@@ -19,11 +24,4 @@ bool checkBrackets(const std::string& s) {
     }
 
     return st.empty();
-}
-
-bool isCorrectBracket(char left, char right) {
-    return (left == '(' && right == ')') ||
-        (left == '[' && right == ']') ||
-        (left == '{' && right == '}') ||
-        (left == '<' && right == '>');
 }
