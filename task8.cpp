@@ -1,6 +1,6 @@
 #include <fstream>
 #include "kmp.h"
-#include <vector>
+
 using namespace std;
 
 int main(int argc, char** argv) {
