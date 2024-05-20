@@ -6,8 +6,8 @@ double calculateRPN(const std::string& expr) {
     std::stack<double> stack;
     std::istringstream is(expr);
 
-    std::string token;
-    while (is >> token) {
+    std::string tok;
+    while (is >> tok) {
         if (tok == "+" || tok == "-" || tok == "*" || tok == "/") {
             double op2 = stack.top();
             stack.pop();
