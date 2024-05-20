@@ -1,6 +1,6 @@
 #include "kmp.h"
 #include <vector>
-
+using namespace std;
 std::vector<int> getIndices(const std::string& my_template, const std::string& text)
 {
     vector<int> T(text.size() + 1, -1);
