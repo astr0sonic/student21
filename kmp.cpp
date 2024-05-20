@@ -1,44 +1,33 @@
 #include "kmp.h"
 #include <vector>
 
-std::vector<int> getIndices(const std::string& my_template, const std::string& text) {
-    std::vector<int> result;
+std::vector<int> getIndices(const std::string& my_template, const std::string& text)
+{
+    vector<int> T(text.size() + 1, -1);
+    vector<int> matches;
 
-    // Построение таблицы префиксов
-    std::vector<int> prefix(my_template.length());
-    int k = 0;
-    prefix[0] = 0;
-    for (int q = 1; q < my_template.length(); q++) {
-        while (k > 0 && my_template[k] != my_template[q]) {
-            k = prefix[k - 1];
-        }
-        if (my_template[k] == my_template[q]) {
-            k++;
-        }
-        prefix[q] = k;
+    if (text.size() == 0) {
+        matches.push_back(0);
+        return matches;
     }
 
-    // Поиск вхождений подстроки
-    int m = 0;
-    int n = 0;
-    while (m < text.length()) {
-        if (my_template[n] == text[m]) {
-            n++;
-            m++;
-        }
-        if (n == my_template.length()) {
-            result.push_back(m - n);
-            n = prefix[n - 1];
-        }
-        else if (m < text.length() && my_template[n] != text[m]) {
-            if (n != 0) {
-                n = prefix[n - 1];
-            }
-            else {
-                m = m + 1;
-            }
-        }
+    for (int i = 1; i <= text.size(); i++) {
+        int pos = T[i - 1];
+        while (pos != -1 && text[pos] != text[i - 1])
+            pos = T[pos];
+        T[i] = pos + 1;
     }
 
-    return result;
+    int sp = 0;
+    int kp = 0;
+    while (sp < my_template.size()) {
+        while (kp != -1 && (kp == text.size() || text[kp] != my_template[sp]))
+            kp = T[kp];
+        kp++;
+        sp++;
+        if (kp == text.size())
+            matches.push_back(sp - text.size());
+    }
+
+    return matches;
 }
