@@ -1,3 +1,6 @@
+#include <vector>
+#include <string>
+#include <iostream>
 #include "kmp.h"
 
 vector<int> prefix_func(const string& s)
