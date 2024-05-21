@@ -1,45 +1,37 @@
 #include "kmp.h"
-#include <vector>
 
-
-std::vector<int> getIndices(const std::string& my_template, const std::string& text) {
-    std::vector<int> result;
-
-    // Построение таблицы префиксов
-    std::vector<int> prefix(my_template.length());
-    int k = 0;
-    prefix[0] = 0;
-    for (int q = 1; q < my_template.length(); q++) {
-        while (k > 0 && my_template[k] != my_template[q]) {
-            k = prefix[k - 1];
+vector<int> prefix_func(const string& s)
+{
+    int n = s.length();
+    vector<int> pref_f(n, 0);
+    for (int i = 1; i < n; i++)
+    {
+        int j = pref_f[i - 1];
+        while (j > 0 && s[i] != s[j])
+        {
+            j = pref_f[j - 1];
         }
-        if (my_template[k] == my_template[q]) {
-            k++;
+        if (s[i] == s[j])
+        {
+            j++;
         }
-        prefix[q] = k;
+        pref_f[i] = j;
     }
+    return pref_f;
+}
 
-    // Поиск вхождений подстроки
-    int m = 0;
-    int n = 0;
-    while (m < text.length()) {
-        if (my_template[n] == text[m]) {
-            n++;
-            m++;
-        }
-        if (n == my_template.length()) {
-            result.push_back(m - n);
-            n = prefix[n - 1];
-        }
-        else if (m < text.length() && my_template[n] != text[m]) {
-            if (n != 0) {
-                n = prefix[n - 1];
-            }
-            else {
-                m = m + 1;
-            }
+std::vector<int> getIndices(const std::string& my_template, const std::string& text)
+{
+    vector<int> result;
+    string s = my_template + '#' + text;
+    vector<int> pref_f = prefix_func(s);
+    int temp_len = my_template.length();
+    for (int i = temp_len + 1; i < s.length(); ++i)
+    {
+        if (pref_f[i] == temp_len)
+        {
+            result.push_back(i - 2 * temp_len);
         }
     }
-
     return result;
 }
