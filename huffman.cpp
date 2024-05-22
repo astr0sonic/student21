@@ -5,13 +5,7 @@
 #include <queue>
 using namespace std;
 
-struct comp
-{
-    bool operator()(const node* l, const node* r) const
-    {
-        return l->freq > r->freq;
-    }
-};
+
 
 void encodedStr(node* root, string str, map<char, string>& huffmanCode)
 {
