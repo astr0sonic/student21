@@ -1,6 +1,6 @@
 #include "lzw.h"
 
-#include "lzw.h"
+
 
 std::vector<int> compress(const std::string& text) {
     map<string, int> dict;
