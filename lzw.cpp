@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <map>
+using namespace std;
 
 std::vector<int> compress(const std::string& text) {
     map<string, int> dict;
