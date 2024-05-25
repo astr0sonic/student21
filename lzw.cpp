@@ -1,8 +1,10 @@
 #include "lzw.h"
 #include <string>
 #include <vector>
-#include <map>
+
 #include <iostream>
+#include <map>
+
 std::vector<int> compress(const std::string& text) {
     map<string, int> dict;
     for (int i = 0; i < 256; i++)
