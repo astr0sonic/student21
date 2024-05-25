@@ -35,7 +35,12 @@ std::string decompress(const std::vector<int>& compressed) {
     {
         dict[i] = string(1, char(i));
     }
-    string prev = dict[compressed[0]];
+    if (dict.find(compressed[0]) != dict.end()) {
+        string prev = dict[compressed[0]];
+    }
+    else {
+        throw runtime_error("Invalid compressed data.");
+    }
     string decompress = prev;
     for (int i = 1; i < compressed.size(); i++)
     {
