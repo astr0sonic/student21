@@ -1,51 +1,46 @@
 #include "lzw.h"
+#include <iostream>
+#include <vector>
+#include <map>
+#include <string>
 
-std::vector<int> compress(const std::string& text) {
-    map<string, int> dict;
-    for (int i = 0; i < 256; i++)
-    {
-        dict[string(1, char(i))] = i;
+std::vector<unsigned char> compress(const std::string& text) {
+    std::map<std::string, unsigned char> dict;
+    for (int i = 0; i < 256; i++) {
+        dict[std::string(1, char(i))] = i;
     }
-    string curr = "";
-    vector<int> compress;
-    for (char c : text)
-    {
-        string comb = curr + c;
-        if (dict.find(comb) != dict.end())
-        {
+    std::string curr = "";
+    std::vector<unsigned char> compressed;
+    for (char c : text) {
+        std::string comb = curr + c;
+        if (dict.find(comb) != dict.end()) {
             curr = comb;
         }
-        else
-        {
-            compress.push_back(dict[curr]);
+        else {
+            compressed.push_back(dict[curr]);
             dict[comb] = dict.size();
-            curr = string(1, c);
+            curr = std::string(1, c);
         }
     }
-    if (!curr.empty())
-    {
-        compress.push_back(dict[curr]);
+    if (!curr.empty()) {
+        compressed.push_back(dict[curr]);
     }
-    return compress;
+    return compressed;
 }
 
-std::string decompress(const std::vector<int>& compressed) {
-    map<int, string> dict;
-    for (int i = 0; i < 256; i++)
-    {
-        dict[i] = string(1, char(i));
+std::string decompress(const std::vector<unsigned char>& compressed) {
+    std::map<unsigned char, std::string> dict;
+    for (int i = 0; i < 256; i++) {
+        dict[i] = std::string(1, char(i));
     }
-    string prev = dict[compressed[0]];
-    string decompress = prev;
-    for (int i = 1; i < compressed.size(); i++)
-    {
-        string curr;
-        if (dict.find(compressed[i]) != dict.end())
-        {
+    std::string prev = dict[compressed[0]];
+    std::string decompress = prev;
+    for (int i = 1; i < compressed.size(); i++) {
+        std::string curr;
+        if (dict.find(compressed[i]) != dict.end()) {
             curr = dict[compressed[i]];
         }
-        else
-        {
+        else {
             curr = prev + prev[0];
         }
         decompress += curr;
