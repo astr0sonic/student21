@@ -1,27 +1,27 @@
-#include <iostream>
+#ifndef HUFFMAN_H
+#define HUFFMAN_H
+
 #include <string>
 #include <map>
 #include <queue>
 
-using namespace std;
-
-struct node
-{
-    char info;
+struct TreeNode {
+    char data;
     int freq;
-    node* left;
-    node* right;
-    node(char ch, int frequ, node* l = nullptr, node* r = nullptr) : info(ch), freq(frequ), left(l), right(r) {}
+    TreeNode* left;
+    TreeNode* right;
+    TreeNode(char c, int f) : data(c), freq(f), left(nullptr), right(nullptr) {}
 };
 
-struct comp
-{
-    bool operator()(const node* l, const node* r) const
-    {
-        return l->freq > r->freq;
+struct CompareNodes {
+    bool operator()(TreeNode* a, TreeNode* b) {
+        return a->freq > b->freq;
     }
 };
 
-void generate_code(node* root, string str, map<char, string>& huffman_code);
+void encodeHelper(TreeNode* node, std::string code, std::map<char, std::string>& codes);
+
 std::string encode(const std::string& text);
 std::string decode(const std::string& encoded, std::map<char, std::string>& codes);
+
+#endif

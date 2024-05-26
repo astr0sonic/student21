@@ -1,62 +1,64 @@
 #include "huffman.h"
-#include <iostream>
-#include <string>
-#include <map>
-#include <queue>
-using namespace std;
 
 
-void encodedStr(node* root, string str, map<char, string>& huffmanCode)
-{
-    if (root == NULL) {
-        return;
+std::string encode(const std::string& text) {
+    std::map<char, int> freq;
+    for (char ch : text) {
+        freq[ch]++;
     }
-    if (root->left == NULL && root->right == NULL) {
-        huffmanCode[root->info] = (!str.empty()) ? str : "1";
+
+    std::priority_queue<TreeNode*, std::vector<TreeNode*>, CompareNodes> pq;
+    for (const auto& entry : freq) {
+        pq.push(new TreeNode(entry.first, entry.second));
     }
-    encodedStr(root->left, str + "0", huffmanCode);
-    encodedStr(root->right, str + "1", huffmanCode);
-}
 
-string encode(const string& text) {
-    string encoded = "";
-    priority_queue<node*, vector<node*>, comp> pq;
-
-    map<char, int> mp;
-    for (char c : text)
-        mp[c] += 1;
-
-    for (auto i : mp)
-        pq.push(new node{ i.first, i.second, NULL, NULL });
-
-    while (pq.size() != 1) {
-        node* left = pq.top(); pq.pop();
-        node* right = pq.top(); pq.pop();
-        pq.push(new node{ '\0', left->freq + right->freq, left, right });
+    while (pq.size() > 1) {
+        TreeNode* left = pq.top();
+        pq.pop();
+        TreeNode* right = pq.top();
+        pq.pop();
+        TreeNode* combined = new TreeNode('$', left->freq + right->freq);
+        combined->left = left;
+        combined->right = right;
+        pq.push(combined);
     }
-    node* root = pq.top();
 
-    map<char, string> huffmanCode;
-    encodedStr(root, encoded, huffmanCode);
+    TreeNode* root = pq.top();
 
-    for (char ch : text)
-        encoded += huffmanCode[ch];
+    std::map<char, std::string> codes;
+    std::string code;
+    encodeHelper(root, code, codes);
+
+    std::string encoded = "";
+    for (char ch : text) {
+        encoded += codes[ch];
+    }
 
     return encoded;
 }
 
-string decode(const string& encoded, map<char, string>& codes) {
-    string decoded = "";
-    map<string, char> newcodes;
-    for (auto i : codes)
-        newcodes[i.second] = i.first;
-    string temp = "";
+void encodeHelper(TreeNode* node, std::string code, std::map<char, std::string>& codes) {
+    if (!node) {
+        return;
+    }
+    if (node->data != '$') {
+        codes[node->data] = code;
+    }
+    encodeHelper(node->left, code + "0", codes);
+    encodeHelper(node->right, code + "1", codes);
+}
+
+std::string decode(const std::string& encoded, std::map<char, std::string>& codes) {
+    std::string decoded = "";
+    std::string currCode = "";
     for (char ch : encoded) {
-        temp += ch;
-        if (newcodes.find(temp) != newcodes.end())
-        {
-            decoded += newcodes[temp];
-            temp.clear();
+        currCode += ch;
+        for (const auto& entry : codes) {
+            if (entry.second == currCode) {
+                decoded += entry.first;
+                currCode = "";
+                break;
+            }
         }
     }
     return decoded;
